@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20160429 08:11:57.354" generator="Robot 2.9 (Python 2.7.8 on win32)">
+<suite source="c:\Git\shenick\IPTVDataTests.robot" id="s1" name="IPTVDataTests">
+<test id="s1-t1" name="4P GPON_Data-Video_Test">
+<kw name="Comment" library="BuiltIn">
+<doc>Displays the given messages in the log file as keyword arguments.</doc>
+<arguments>
+<arg>Test Case Defaults</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:00.477" starttime="20160429 08:12:00.477"></status>
+</kw>
+<kw name="Get Head End Mos Statistic" library="ShenickCli">
+<doc>This procedure navigates to the Video Head End Server and gets the minimum MOS.</doc>
+<assign>
+<var>${headEndMinMos}</var>
+</assign>
+<msg timestamp="20160429 08:12:12.287" level="INFO">4.492188
+4.847656</msg>
+<msg timestamp="20160429 08:12:12.287" level="INFO">${headEndMinMos} = 4.492188</msg>
+<status status="PASS" endtime="20160429 08:12:12.288" starttime="20160429 08:12:00.478"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>Client_HTTP_ONT16</arg>
+<arg>Client_HTTP_ONT15</arg>
+<arg>Client_HTTP_ONT14</arg>
+</arguments>
+<assign>
+<var>${appList}</var>
+</assign>
+<msg timestamp="20160429 08:12:12.289" level="INFO">${appList} = [u'Client_HTTP_ONT16', u'Client_HTTP_ONT15', u'Client_HTTP_ONT14']</msg>
+<status status="PASS" endtime="20160429 08:12:12.289" starttime="20160429 08:12:12.288"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>csvFilePath=C:\\diversifEyeClient\\IPTV\\output\\Miscellaneous\\Summary_Multicast_Client.csv</arg>
+<arg>qmVideoMOSLimit=${headEndMinMos}</arg>
+</arguments>
+<assign>
+<var>${igmpDict}</var>
+</assign>
+<msg timestamp="20160429 08:12:12.290" level="INFO">${igmpDict} = {u'csvFilePath': u'C:\\diversifEyeClient\\IPTV\\output\\Miscellaneous\\Summary_Multicast_Client.csv', u'qmVideoMOSLimit': '4.492188'}</msg>
+<status status="PASS" endtime="20160429 08:12:12.290" starttime="20160429 08:12:12.289"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${igmpDict}</arg>
+<arg>mosAppType</arg>
+<arg>VQA</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.291" starttime="20160429 08:12:12.291"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${igmpDict}</arg>
+<arg>zapAppType</arg>
+<arg>STB_Client</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.292" starttime="20160429 08:12:12.292"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>csvFilePath=C:\\diversifEyeClient\\IPTV\\output\\Miscellaneous\\Summary_HTTP_Client.csv</arg>
+</arguments>
+<assign>
+<var>${httpDict}</var>
+</assign>
+<msg timestamp="20160429 08:12:12.293" level="INFO">${httpDict} = {u'csvFilePath': u'C:\\diversifEyeClient\\IPTV\\output\\Miscellaneous\\Summary_HTTP_Client.csv'}</msg>
+<status status="PASS" endtime="20160429 08:12:12.293" starttime="20160429 08:12:12.292"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${httpDict}</arg>
+<arg>appType</arg>
+<arg>HTTP</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.294" starttime="20160429 08:12:12.294"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${httpDict}</arg>
+<arg>goodput</arg>
+<arg>5000</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.295" starttime="20160429 08:12:12.294"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>fileName=IPTV.zip</arg>
+</arguments>
+<assign>
+<var>${saveStatDict}</var>
+</assign>
+<msg timestamp="20160429 08:12:12.296" level="INFO">${saveStatDict} = {u'fileName': u'IPTV.zip'}</msg>
+<status status="PASS" endtime="20160429 08:12:12.296" starttime="20160429 08:12:12.296"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on given items.</doc>
+<arguments>
+<arg>serverIp=10.13.225.18</arg>
+</arguments>
+<assign>
+<var>${copyDict}</var>
+</assign>
+<msg timestamp="20160429 08:12:12.297" level="INFO">${copyDict} = {u'serverIp': u'10.13.225.18'}</msg>
+<status status="PASS" endtime="20160429 08:12:12.297" starttime="20160429 08:12:12.297"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${copyDict}</arg>
+<arg>userName</arg>
+<arg>cli</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.298" starttime="20160429 08:12:12.298"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${copyDict}</arg>
+<arg>password</arg>
+<arg>diversifEye</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.299" starttime="20160429 08:12:12.299"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${copyDict}</arg>
+<arg>sourceFilePath</arg>
+<arg>IPTV.zip</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.300" starttime="20160429 08:12:12.300"></status>
+</kw>
+<kw name="Set To Dictionary" library="Collections">
+<doc>Adds the given ``key_value_pairs`` and ``items`` to the ``dictionary``.</doc>
+<arguments>
+<arg>${copyDict}</arg>
+<arg>destFilePath</arg>
+<arg>C:/diversifEyeClient/analysis/bin/IPTV.zip</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:12.301" starttime="20160429 08:12:12.300"></status>
+</kw>
+<kw name="Stop Test Group" library="ShenickCli">
+<doc>This procedure will execute the cli command to stop the testGroup.</doc>
+<msg timestamp="20160429 08:12:12.785" level="INFO">No test group running...</msg>
+<status status="PASS" endtime="20160429 08:12:12.785" starttime="20160429 08:12:12.301"></status>
+</kw>
+<kw name="Enable Disable Applications" library="ShenickCli">
+<doc>Enable/disable all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>${appList}</arg>
+<arg>Disabled</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:15.060" starttime="20160429 08:12:12.785"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>3</arg>
+</arguments>
+<msg timestamp="20160429 08:12:18.061" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" endtime="20160429 08:12:18.061" starttime="20160429 08:12:15.061"></status>
+</kw>
+<kw name="Enable Disable Applications" library="ShenickCli">
+<doc>Enable/disable all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>${appList}</arg>
+<arg>Enabled</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:19.842" starttime="20160429 08:12:18.061"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>3</arg>
+</arguments>
+<msg timestamp="20160429 08:12:22.843" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" endtime="20160429 08:12:22.843" starttime="20160429 08:12:19.842"></status>
+</kw>
+<kw name="Enable Disable Applications" library="ShenickCli">
+<doc>Enable/disable all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>all</arg>
+<arg>Disabled</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:24.214" starttime="20160429 08:12:22.844"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>3</arg>
+</arguments>
+<msg timestamp="20160429 08:12:27.215" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" endtime="20160429 08:12:27.216" starttime="20160429 08:12:24.215"></status>
+</kw>
+<kw name="Enable Disable Applications" library="ShenickCli">
+<doc>Enable/disable all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>all</arg>
+<arg>Enabled</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:28.672" starttime="20160429 08:12:27.218"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>3</arg>
+</arguments>
+<msg timestamp="20160429 08:12:31.673" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" endtime="20160429 08:12:31.673" starttime="20160429 08:12:28.673"></status>
+</kw>
+<kw name="Start Test Group" library="ShenickCli">
+<doc>This procedure will execute the cli command to start the testGroup.</doc>
+<status status="PASS" endtime="20160429 08:12:37.596" starttime="20160429 08:12:31.674"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>15</arg>
+</arguments>
+<msg timestamp="20160429 08:12:52.598" level="INFO">Slept 15 seconds</msg>
+<status status="PASS" endtime="20160429 08:12:52.598" starttime="20160429 08:12:37.598"></status>
+</kw>
+<kw name="In Service Out Service Applications" library="ShenickCli">
+<doc>IS/OOS all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>${appList}</arg>
+<arg>Out of Service</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:12:57.646" starttime="20160429 08:12:52.599"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>3</arg>
+</arguments>
+<msg timestamp="20160429 08:13:00.647" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" endtime="20160429 08:13:00.647" starttime="20160429 08:12:57.647"></status>
+</kw>
+<kw name="In Service Out Service Applications" library="ShenickCli">
+<doc>IS/OOS all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>${appList}</arg>
+<arg>In Service</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:13:02.693" starttime="20160429 08:13:00.648"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>10</arg>
+</arguments>
+<msg timestamp="20160429 08:13:12.693" level="INFO">Slept 10 seconds</msg>
+<status status="PASS" endtime="20160429 08:13:12.693" starttime="20160429 08:13:02.693"></status>
+</kw>
+<kw name="In Service Out Service Applications" library="ShenickCli">
+<doc>IS/OOS all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>all</arg>
+<arg>Out of Service</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:13:15.495" starttime="20160429 08:13:12.693"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>3</arg>
+</arguments>
+<msg timestamp="20160429 08:13:18.496" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" endtime="20160429 08:13:18.496" starttime="20160429 08:13:15.496"></status>
+</kw>
+<kw name="In Service Out Service Applications" library="ShenickCli">
+<doc>IS/OOS all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>all</arg>
+<arg>In Service</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:13:21.274" starttime="20160429 08:13:18.496"></status>
+</kw>
+<kw name="In Service Out Service Applications" library="ShenickCli">
+<doc>IS/OOS all or a list of applicaionts (hosts)</doc>
+<arguments>
+<arg>${appList}</arg>
+<arg>In Service</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:13:23.280" starttime="20160429 08:13:21.274"></status>
+</kw>
+<kw name="Save Stats" library="ShenickCli">
+<doc>This method saves results as zip file in shenick controller.</doc>
+<arguments>
+<arg>${saveStatDict}</arg>
+</arguments>
+<status status="PASS" endtime="20160429 08:13:26.413" starttime="20160429 08:13:23.281"></status>
+</kw>
+<kw name="Stop Test Group" library="ShenickCli">
+<doc>This procedure will execute the cli command to stop the testGroup.</doc>
+<msg timestamp="20160429 08:13:28.988" level="INFO">Test group stopped</msg>
+<status status="PASS" endtime="20160429 08:13:28.988" starttime="20160429 08:13:26.413"></status>
+</kw>
+<kw name="Copy File From Server" library="TrafficAnalysis">
+<doc>This method gets the file from remote server and copy to given local file path.</doc>
+<arguments>
+<arg>${copyDict}</arg>
+</arguments>
+<msg timestamp="20160429 08:13:29.155" level="INFO">File IPTV.zip has been copied successfully to dir C:/diversifEyeClient/analysis/bin</msg>
+<status status="PASS" endtime="20160429 08:13:29.155" starttime="20160429 08:13:28.988"></status>
+</kw>
+<kw name="Run Analysis Batch File" library="TrafficAnalysis">
+<doc>This method runs Analyse.bat on give results (*.zip) and saves the summary csv files in given output path.</doc>
+<arguments>
+<arg>C:\\diversifEyeClient\\analysis\\bin\\IPTV.Zip</arg>
+<arg>C:\\diversifEyeClient</arg>
+</arguments>
+<msg timestamp="20160429 08:14:07.107" level="INFO">Analysis.bat ran successfully</msg>
+<status status="PASS" endtime="20160429 08:14:07.107" starttime="20160429 08:13:29.156"></status>
+</kw>
+<kw name="Evaluate Igmp Applications" library="TrafficAnalysis">
+<doc>This method read Summary_Multicast_Client.csv file and evaluate all IGMP applications, which includes MOS and Zapping applications.</doc>
+<arguments>
+<arg>${igmpDict}</arg>
+</arguments>
+<msg timestamp="20160429 08:14:07.108" level="WARN">4.492188</msg>
+<msg timestamp="20160429 08:14:07.114" level="INFO">4.492188
+AM_Benchmark_Zap :: Set to Out of Service or no DHCP attained, skip analysis
+PASS :: &lt;STB_VQA_ONT11&gt; MOS 4.652344 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT11&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT11&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT13&gt; MOS 4.726562 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT13&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT13&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT14&gt; MOS 4.847656 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT14&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT14&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT10&gt; MOS 4.679688 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT10&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT10&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT12&gt; MOS 4.847656 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT12&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT12&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT15&gt; MOS 4.847656 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT15&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT15&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT16&gt; MOS 4.726562 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT16&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT16&gt; Impared frame count 0 was less than or equal to 3
+SM_Benchmark_MOS :: Set to Out of Service or no DHCP attained, skip analysis
+PASS :: &lt;STB_VQA_ONT02&gt; MOS 4.679688 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT02&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT02&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT01&gt; MOS 4.679688 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT01&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT01&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT04&gt; MOS 4.679688 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT04&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT04&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT03&gt; MOS 4.679688 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT03&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT03&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT5&gt; MOS 4.847656 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT5&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT5&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT6&gt; MOS 4.75 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT6&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT6&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT7&gt; MOS 4.75 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT7&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT7&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT8&gt; MOS 4.847656 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT8&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT8&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_VQA_ONT9&gt; MOS 4.847656 was greater than or equal to 4.492188
+PASS :: &lt;STB_VQA_ONT9&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_VQA_ONT9&gt; Impared frame count 0 was less than or equal to 3
+PASS :: &lt;STB_Client_ONT10a&gt; JoinTimeAvg 50.68217 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT10a&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT10a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT10a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT10a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT11a&gt; JoinTimeAvg 57.63517 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT11a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT11a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT11a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT11a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT12a&gt; JoinTimeAvg 42.40383 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT12a&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT12a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT12a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT12a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+FAIL :: &lt;STB_Client_ONT13a&gt; JoinTimeAvg 201.92 was greater than 125
+PASS :: &lt;STB_Client_ONT13a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT13a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT13a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT13a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT14a&gt; JoinTimeAvg 40.78817 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT14a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT14a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT14a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT14a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT15a&gt; JoinTimeAvg 77.65767 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT15a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT15a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT15a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT15a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT16a&gt; JoinTimeAvg 57.85333 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT16a&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT16a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT16a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT16a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT1a&gt; JoinTimeAvg 25.37583 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT1a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT1a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT1a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT1a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT2a&gt; JoinTimeAvg 28.054 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT2a&gt; Total packet loss 3 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT2a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT2a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT2a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT3a&gt; JoinTimeAvg 18.08183 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT3a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT3a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT3a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT3a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT4a&gt; JoinTimeAvg 28.56433 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT4a&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT4a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT4a&gt; Percentage Leavs completed 80.0 was less than 95.0
+FAIL :: &lt;STB_Client_ONT4a&gt; Percentage Leaves completed against joins 66.6666666667 was less than 95.0
+PASS :: &lt;STB_Client_ONT5a&gt; JoinTimeAvg 19.83083 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT5a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT5a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT5a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT5a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT6a&gt; JoinTimeAvg 22.14567 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT6a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT6a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT6a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT6a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT7a&gt; JoinTimeAvg 31.29367 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT7a&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT7a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT7a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT7a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT8a&gt; JoinTimeAvg 26.87233 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT8a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT8a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT8a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT8a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT9a&gt; JoinTimeAvg 65.6815 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT9a&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT9a&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT9a&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT9a&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT10b&gt; JoinTimeAvg 58.58133 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT10b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT10b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT10b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT10b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT11b&gt; JoinTimeAvg 68.45317 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT11b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT11b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT11b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT11b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT12b&gt; JoinTimeAvg 55.27983 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT12b&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT12b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT12b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT12b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+FAIL :: &lt;STB_Client_ONT13b&gt; JoinTimeAvg 172.6355 was greater than 125
+PASS :: &lt;STB_Client_ONT13b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT13b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT13b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT13b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT14b&gt; JoinTimeAvg 41.39 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT14b&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT14b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT14b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT14b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT15b&gt; JoinTimeAvg 46.65583 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT15b&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT15b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT15b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT15b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT16b&gt; JoinTimeAvg 58.684 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT16b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT16b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT16b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT16b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT1b&gt; JoinTimeAvg 16.156 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT1b&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT1b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT1b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT1b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT2b&gt; JoinTimeAvg 33.34083 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT2b&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT2b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT2b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT2b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT3b&gt; JoinTimeAvg 29.506 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT3b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT3b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT3b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT3b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT4b&gt; JoinTimeAvg 28.6325 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT4b&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT4b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT4b&gt; Percentage Leavs completed 80.0 was less than 95.0
+FAIL :: &lt;STB_Client_ONT4b&gt; Percentage Leaves completed against joins 66.6666666667 was less than 95.0
+PASS :: &lt;STB_Client_ONT5b&gt; JoinTimeAvg 19.74167 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT5b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT5b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT5b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT5b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT6b&gt; JoinTimeAvg 11.62417 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT6b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT6b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT6b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT6b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT7b&gt; JoinTimeAvg 23.22783 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT7b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT7b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT7b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT7b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT8b&gt; JoinTimeAvg 26.09183 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT8b&gt; Total packet loss 0 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT8b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT8b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT8b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+PASS :: &lt;STB_Client_ONT9b&gt; JoinTimeAvg 62.88433 was less than or equal to 125
+PASS :: &lt;STB_Client_ONT9b&gt; Total packet loss 1 was less than or equal to 20
+PASS :: &lt;STB_Client_ONT9b&gt; Percentage Joins completed 100.0 was greater than or equal to 95.0
+PASS :: &lt;STB_Client_ONT9b&gt; Percentage Leaves completed 100.0 was greater than or equal to 95.0
+FAIL :: &lt;STB_Client_ONT9b&gt; Percentage Leaves completed against joins 83.3333333333 was less than 95.0
+SM_Benchmark_Zap :: Set to Out of Service or no DHCP attained, skip analysis
+##########All IGMP measures are not within limits########</msg>
+<status status="PASS" endtime="20160429 08:14:07.115" starttime="20160429 08:14:07.108"></status>
+</kw>
+<kw name="Evaluate Http Applications" library="TrafficAnalysis">
+<doc>This method read Summary_Http_Client.csv file and evaluate all HTTP applications.</doc>
+<arguments>
+<arg>${httpDict}</arg>
+</arguments>
+<msg timestamp="20160429 08:14:07.117" level="INFO">PASS :: &lt;Client_HTTP_ONT1&gt; Goodput value 15475.87 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT10&gt; Goodput value 15726.42 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT11&gt; Goodput value 14907.65 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT12&gt; Goodput value 14798.56 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT2&gt; Goodput value 13826.58 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT3&gt; Goodput value 14327.95 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT4&gt; Goodput value 12781.29 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT9&gt; Goodput value 12945.96 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT13&gt; Goodput value 14623.85 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT14&gt; Goodput value 6738.923 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT15&gt; Goodput value 9053.238 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT16&gt; Goodput value 7465.302 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT5&gt; Goodput value 14230.72 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT6&gt; Goodput value 14471.76 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT7&gt; Goodput value 13061.2 was greater than or equal to 4250.0
+PASS :: &lt;Client_HTTP_ONT8&gt; Goodput value 14298.42 was greater than or equal to 4250.0
+********** All HTTP measures are within limits **********</msg>
+<status status="PASS" endtime="20160429 08:14:07.117" starttime="20160429 08:14:07.115"></status>
+</kw>
+<status status="PASS" endtime="20160429 08:14:07.117" critical="yes" starttime="20160429 08:12:00.476"></status>
+</test>
+<status status="PASS" endtime="20160429 08:14:07.119" starttime="20160429 08:11:57.359"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="IPTVDataTests" pass="1">IPTVDataTests</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20160429 08:14:07.108" level="WARN">4.492188</msg>
+</errors>
+</robot>

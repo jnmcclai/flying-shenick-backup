@@ -1,0 +1,34 @@
+*** Settings ***
+Library           ShenickCli.py    ${ip}    ${usr}    ${partition}
+Library           TrafficAnalysis.py
+Library           Collections
+
+*** Variables ***
+${ip}             10.13.225.18
+${usr}            IPTV
+${partition}      2
+${chassisType}    None
+
+*** Test Cases ***
+4P GPON_Data-Video_Test
+    Comment    Test Case Defaults
+    ${igmpDict}    Create Dictionary    csvFilePath    C:\\diversifEyeClient\\IPTV\\output\\Miscellaneous\\Summary_Multicast_Client.csv
+    Set To Dictionary    ${igmpDict}    mosAppType    VQA
+    Set To Dictionary    ${igmpDict}    zapAppType    STB_Client
+    ${httpDict}    Create Dictionary    csvFilePath    C:\\diversifEyeClient\\IPTV\\output\\Miscellaneous\\Summary_HTTP_Client.csv
+    Set To Dictionary    ${httpDict}    appType    HTTP
+    Set To Dictionary    ${httpDict}    goodput    5000
+    ${saveStatDict}    Create Dictionary    fileName    IPTV.zip
+    ${copyDict}    Create Dictionary    serverIp     10.13.225.18
+    Set To Dictionary    ${copyDict}    userName     cli
+    Set To Dictionary    ${copyDict}    password     diversifEye
+    Set To Dictionary    ${copyDict}    sourceFilePath     /home/cli/IPTV.zip
+    Set To Dictionary    ${copyDict}    destFilePath     C:/diversifEyeClient/analysis/bin/IPTV.zip
+    ShenickCli.Start Test Group    //GPON/GPON_Triple_Play_LoadTest
+    Sleep    60
+    ShenickCli.Save Stats    ${saveStatDict}
+    ShenickCli.Stop Test Group    //GPON/GPON_Triple_Play_LoadTest
+    TrafficAnalysis.Copy File From Server    ${copyDict}
+    TrafficAnalysis.Run Analysis Batch File    C:\\diversifEyeClient\\analysis\\bin\\IPTV.Zip    C:\\diversifEyeClient
+    TrafficAnalysis.Evaluate Igmp Applications    ${igmpDict}
+    TrafficAnalysis.Evaluate Http Applications    ${httpDict}

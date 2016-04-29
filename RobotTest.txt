@@ -1,0 +1,16 @@
+*** Settings ***
+Library           ShenickCli.py    ${ip}    ${usr}    ${partition}
+Library           TrafficAnalysis.py
+
+*** Variables ***
+${ip}             10.13.225.18
+${usr}            IPTV
+${partition}      2
+${chassisType}    None
+
+*** Test Cases ***
+Test1
+    ShenickCli.Get List Applications    //GPON/GPON_Stateful_V4_LoadTest
+    #ShenickCli.Start Test Group    //GPON/GPON_Stateful_V4_LoadTest
+    #TrafficAnalysis.Run Analisys Bat
+    #TrafficAnalysis.Igmp Applications Evaluation

@@ -1,0 +1,567 @@
+*** Settings ***
+Library           %{TA_LIB}/libraries/robot/shenick/Shenick.py    10.0.3.101
+Library           Collections
+Library           OperatingSystem
+Library           %{TA_LIB}/libraries/robot/hix56xx/Hix56xx.py
+Library           %{TA_LIB}/libraries/robot/common/Tools.py
+
+*** Test Cases ***
+Distribution Profile
+    Shenick.User Set    user1
+    #incomplete values
+    Shenick.Test Group Create    ${TEST_NAME}_Error1
+    Shenick.Probability Distribution Create    ${TEST_NAME}_Error1_dist    45:25-30
+    Run Keyword And Expect Error    *    Shenick.Test Group Upload
+    #too much
+    Shenick.Test Group Create    ${TEST_NAME}_Error2
+    Shenick.Probability Distribution Create    ${TEST_NAME}_Error2_dist    45:25-30    10:25-30    50:10    40:789    description=This is my description.
+    Run Keyword And Expect Error    *    Shenick.Test Group Upload
+    #empty
+    Shenick.Test Group Create    ${TEST_NAME}_Error3
+    Shenick.Probability Distribution Create    ${TEST_NAME}_Error3_dist
+    Run Keyword And Expect Error    *    Shenick.Test Group Upload
+    #everything fine
+    Shenick.Test Group Create    ${TEST_NAME}
+    Shenick.Probability Distribution Create    ${TEST_NAME}_dist    10:25-30    50:10    40:789    description=This is my description.
+    Shenick.Probability Distribution Create    ${TEST_NAME}_dist2    10:25-30    40:789    50:10    description=This is my description.
+    Shenick.Probability Distribution Create    ${TEST_NAME}_dist3    100:5    description=This is my description.
+    Run Keyword And Continue On Failure    Shenick.Test Group Upload
+    ${debugFiles}    Debug Files Get
+    Log Dictionary    ${debugFiles}
+
+TCP Characteristics
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    Shenick.Probability Distribution Create    ${TEST_NAME}_dist    10:25-30    50:10    40:789    description=This is my description.
+    TCP Profiles : Create
+
+Bandwidth Rate Limit
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    #no values
+    Shenick.Bandwidth Rate Limit Create    ${TEST_NAME}_bandwNone
+    #all values
+    ${bwParam}    Create Dictionary
+    Set To Dictionary    ${bwParam}    rateLimit    100
+    Set To Dictionary    ${bwParam}    rateLimitMetric    mbit/s
+    Set To Dictionary    ${bwParam}    isRampingEnabled    true
+    Set To Dictionary    ${bwParam}    rampingStartFrom    1
+    Set To Dictionary    ${bwParam}    rampingStartFromMetric    mbit/s
+    Set To Dictionary    ${bwParam}    rampingPeriod    2
+    Set To Dictionary    ${bwParam}    rampingPeriodMetric    mins
+    Shenick.Bandwidth Rate Limit Create    ${TEST_NAME}_bandwAll    ${bwParam}
+    Shenick.Test Group Upload
+
+Network Characteristics
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    #no values
+    Shenick.Network Characteristics Create    ${TEST_NAME}_nwCharNone
+    #all values
+    Shenick.Probability Distribution Create    ${TEST_NAME}_probDist    10:25-30    50:10    40:789
+    ${param}    Create Dictionary
+    Set To Dictionary    ${param}    packetDelay    ${TEST_NAME}_probDist
+    Set To Dictionary    ${param}    dropRate    12
+    Set To Dictionary    ${param}    enableDropBurst    true
+    Set To Dictionary    ${param}    dropBurstSizeFrom    10
+    Set To Dictionary    ${param}    dropBurstSizeTo    56
+    Set To Dictionary    ${param}    limitBursts    2
+    Shenick.Network Characteristics Create    ${TEST_NAME}_nwCharAll    ${param}
+    Shenick.Test Group Upload
+
+Aggregate Group
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    #no values
+    ${empty}    Create Dictionary
+    Shenick.Aggregate Group Create    ${TEST_NAME}_aggrGroupNone    ${empty}
+    #All Values
+    ${allParam}    Create Dictionary
+    Set To Dictionary    ${allParam}    description    This is Aggregation Group shall have all custom values!
+    Set To Dictionary    ${allParam}    enhancedLeaveStats    true
+    Set To Dictionary    ${allParam}    connectionStats    true
+    Set To Dictionary    ${allParam}    extendedTcpStats    true
+    Set To Dictionary    ${allParam}    latencyStats    true
+    Set To Dictionary    ${allParam}    responseCodeStats    true
+    Set To Dictionary    ${allParam}    dhcpStats    true
+    Set To Dictionary    ${allParam}    pppoeStats    true
+    Set To Dictionary    ${allParam}    rtpStats    true
+    Set To Dictionary    ${allParam}    udpStats    true
+    ${aggregate1}    Create Dictionary    type    MulticastMp2tsServer    normalStats    true    fineStats
+    ...    true
+    ${aggregate2}    Create Dictionary    type    AllServer    normalStats    true    fineStats
+    ...    false
+    ${aggregate3}    Create Dictionary    type    P2P    normalStats    false    fineStats
+    ...    true
+    ${aggregate4}    Create Dictionary    type    VoipUA    normalStats    false    fineStats
+    ...    false
+    ${aggregateList}    Create List    ${aggregate1}    ${aggregate2}    ${aggregate3}    ${aggregate4}
+    Set To Dictionary    ${allParam}    aggregates    ${aggregateList}
+    Shenick.Aggregate Group Create    ${TEST_NAME}_aggrGroupAll    ${allParam}
+    Shenick.Test Group Upload
+
+Virtual Host
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    #minimumValues
+    ${generalParam}    Create Dictionary    ipAddress    192.168.55.1/24
+    ${linkLayerParam}    Create Dictionary    physicalInterface    3/1/0
+    Shenick.Host Create    ${TEST_NAME}_minimumValues    ${generalParam}    ${linkLayerParam}
+    #multi-vlan
+    ${vlanList}    Create List    2    3    4    5    500
+    ...    2500
+    ${vlanPrioList}    Create List    7    6    3    0
+    ${linkLayerParam}    Create Dictionary    physicalInterface    3/1/0    linkLayer    multipleTaggedVlan    vlanIdList
+    ...    ${vlanList}    vlanPrioList    ${vlanPrioList}
+    Shenick.Host Create    ${TEST_NAME}_multiVlan    ${generalParam}    ${linkLayerParam}
+    #maximum values
+    Shenick.Tcp Characteristics Create    ${TEST_NAME}_tcpCharacteristics
+    Shenick.Bandwidth Rate Limit Create    ${TEST_NAME}_rateLimit
+    Shenick.Network Characteristics Create    ${TEST_NAME}_networkChar
+    Shenick.Aggregate Group Create    ${TEST_NAME}_aggGroup
+    Shenick.Probability Distribution Create    ${TEST_NAME}_probDist    40:15    60:100
+    ${generalParam}    Virtual Host : Create generalParamDict    ${TEST_NAME}_tcpCharacteristics    ${TEST_NAME}_rateLimit    ${TEST_NAME}_rateLimit    ${TEST_NAME}_networkChar
+    ${linkLayerParam}    Virtual Host : Create linkLayerParamDict
+    ${dhcpParam}    Create Dictionary    mode    default
+    ${defaultPppoeParam}    Virtual Host : Create defaultPppoeParamDict
+    ${statisticsParam}    Virtual Host : Create statisticsParamDict    ${TEST_NAME}_aggGroup
+    ${activityParam}    Virtual Host : Create activityParamDict    ${TEST_NAME}_probDist    ${TEST_NAME}_probDist    ${TEST_NAME}_probDist    ${TEST_NAME}_probDist
+    Shenick.Host Create    ${TEST_NAME}_maxValues    ${generalParam}    ${linkLayerParam}    ${dhcpParam}    ${defaultPppoeParam}    ${statisticsParam}
+    ...    ${activityParam}
+    Shenick.Test Group Upload
+    Debug Files Get
+
+debugging
+    ${filename}    Set Variable    ${OUTPUT_DIR}${/}shenick.xml
+    OperatingSystem.File Should Exist    ${filename}    File '${filename}' does not exist!
+    Shenick.User Set    user1
+    Shenick.Test Group Delete
+    Shenick.Test Group Upload    ${filename}
+
+CardLevelConfig
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    Shenick.Card Level Configuration Create    3/1/1
+    Shenick.Test Group Upload
+    [Teardown]    Shenick.Debug Files Get
+
+FTP
+    Shenick.User Set    robot
+    Shenick.Test Group Create    ${TEST_NAME}
+    ${generalParam}    Create Dictionary    ipAddressAssignmentType    static    ipAddress    10.0.77.1/24
+    ${linkLayerParam}    Create Dictionary    physicalInterface    3/1/0
+    Shenick.Host Create    FtpServer    ${generalParam}    ${linkLayerParam}
+    ${generalParam}    Create Dictionary    ipAddressAssignmentType    static    ipAddress    10.0.77.2/24
+    ${linkLayerParam}    Create Dictionary    physicalInterface    3/1/1
+    Shenick.Host Create    FtpClient    ${generalParam}    ${linkLayerParam}
+    #RESOURCE List
+    ${resource1}    Create Dictionary    type    fixedSize    path    myFile1.tgz    value
+    ...    256000
+    ${resource2}    Create Dictionary    type    fixedSize    path    myFile2.tgz    value
+    ...    512000
+    ${resourceList}    Create List    ${resource1}    ${resource2}
+    ${resourceListParams}    Create Dictionary    resourceList    ${resourceList}
+    Shenick.Ftp Resource List Create    MyFrl    ${resourceListParams}
+    #COMMAND List
+    ${command1}    Create Dictionary    path    /something
+    ${command2}    Create Dictionary    type    ascii
+    ${command3}    Create Dictionary    type    bin
+    ${command4}    Create Dictionary    type    cd    path    /mySubFolder
+    ${command5}    Create Dictionary    type    ls    path    .
+    ${command6}    Create Dictionary    type    put    path    /myFile
+    ${command7}    Create Dictionary    type    pwd
+    ${command8}    Create Dictionary    type    system
+    ${cmdList}    Create List    ${command1}    ${command2}    ${command3}    ${command4}    ${command5}
+    ...    ${command6}    ${command7}    ${command8}
+    ${commandListParams}    Create Dictionary    description    This is my individual FTP Command list    commandList    ${cmdList}
+    Shenick.Ftp Command List Create    myFcl    ${commandListParams}
+    #external ftp server
+    ${extFtpParams}    Create Dictionary    host    10.0.1.16
+    Shenick.Ftp External Server Create    myExtFtp    ${extFtpParams}
+    #ftp server
+    ${ftpServerDict}    Create Dictionary    resourceList    MyFrl    host    FtpServer
+    Ftp Server Create    myFtpServer    ${ftpServerDict}
+    #ftp client
+    ${ftpClientDict}    Create Dictionary    commandList    myFcl    host    FtpClient    server
+    ...    myFtpServer
+    Ftp Client Create    myFtpClient    ${ftpClientDict}
+    Shenick.Test Group Upload
+
+HTTP
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    #create hosts
+    ${hostParams}    Create Dictionary    type    externalHost    ipAddress    1.2.3.4
+    Shenick.Host Create    myExternalHost    ${hostParams}
+    # static host
+    ${hostParams}    Create Dictionary    type    virtualHost    ipAddress    1.2.3.5/24    gatewayHost
+    ...    myExternalHost    physicalInterface    3/1/0
+    Host Create    myStaticVirtualHost    ${hostParams}
+    # static host 2
+    ${hostParams}    Create Dictionary    type    virtualHost    ipAddress    1.2.3.6/24    gatewayHost
+    ...    myExternalHost    physicalInterface    3/1/0
+    Host Create    myStaticVirtualHost2    ${hostParams}
+    # static host 3 - scaled
+    ${hostParams}    Create Dictionary    type    virtualHost    ipAddress    1.2.3.7/24    gatewayHost
+    ...    myExternalHost    numberOfHosts    2    physicalInterface    3/1/0
+    Host Create    myStaticVirtualHost3    ${hostParams}
+    #External HTTP Proxy
+    HTTP : External HTTP Proxy    myExternalHost
+    #External HTTP Server
+    HTTP : External HTTP Server    myExternalHost
+    #Http Resource List
+    HTTP : Resource List
+    #Http Request List
+    HTTP : Request List
+    #Http Server
+    HTTP : Server    myStaticVirtualHost
+    #Http client
+    HTTP : Client    myStaticVirtualHost3
+    #UPLOAD Test Group
+    Shenick.Test Group Upload
+
+DHCPv4 Server
+    Shenick.User Set    user1
+    Shenick.Test Group Create    ${TEST_NAME}
+    # external host
+    ${hostParams}    Create Dictionary    type    externalHost    ipAddress    10.0.0.1
+    Shenick.Host Create    myExternalHost    ${hostParams}
+    # static host
+    ${hostParams}    Create Dictionary    type    virtualHost    ipAddress    10.0.0.2/24    gatewayHost
+    ...    myExternalHost    physicalInterface    3/1/0
+    Shenick.Host Create    myStaticVirtualHost    ${hostParams}
+    # dynamic host
+    ${hostParams}    Create Dictionary    type    virtualHost    ipAddressAssignmentType    dhcpv4    physicalInterface
+    ...    3/1/1
+    Shenick.Host Create    myDynamicVirtualHost    ${hostParams}
+    # dhcp server
+    ${dhcpServerDict}    Create Dictionary    host    myStaticVirtualHost    subnet    10.0.0.0/24    startIpAddress
+    ...    10.0.0.5
+    Set To Dictionary    ${dhcpServerDict}    numberOfIpAddresses    100
+    Set To Dictionary    ${dhcpServerDict}    renewalTime    1000
+    Set To Dictionary    ${dhcpServerDict}    rebindTime    2000
+    Set To Dictionary    ${dhcpServerDict}    leaseTime    3000
+    Set To Dictionary    ${dhcpServerDict}    dnsServer    8.8.8.8
+    Set To Dictionary    ${dhcpServerDict}    domain    bla.com
+    Set To Dictionary    ${dhcpServerDict}    broadcastDhcpOffer    true
+    Set To Dictionary    ${dhcpServerDict}    relayAgentInfoInReplies    true
+    Shenick.Dhcpv 4 Server Create    myDhcpServer    ${dhcpServerDict}
+    # upload
+    Shenick.Test Group Upload
+    Comment    Test Group Start    ${TEST_NAME}
+    [Teardown]    Debug Files Get
+
+PPPoE Server
+    Shenick.User Set    alex
+    Shenick.Test Group Create    ${TEST_NAME}
+    # external host
+    ${hostParams}    Create Dictionary    type    externalHost    ipAddress    10.0.0.1
+    Shenick.Host Create    myExternalHost    ${hostParams}
+    # static host
+    ${hostParams}    Create Dictionary    type    virtualHost    ipAddress    10.0.0.2/24    gatewayHost
+    ...    myExternalHost    physicalInterface    3/1/0
+    Shenick.Host Create    myStaticVirtualHost    ${hostParams}
+    # dynamic host
+    ${hostParams}    Create Dictionary    type    virtualHost    ipAddressAssignmentType    pppoe-ipv4cp    physicalInterface
+    ...    3/1/1
+    Set To Dictionary    ${hostParams}    mtu    1492
+    Set To Dictionary    ${hostParams}    isPapSupported    true
+    Set To Dictionary    ${hostParams}    username    martin
+    Set To Dictionary    ${hostParams}    password    meins
+    Set To Dictionary    ${hostParams}    serviceName    bla
+    Set To Dictionary    ${hostParams}    accessConcentrator    blubb
+    Shenick.Host Create    myDynamicVirtualHost    ${hostParams}
+    # pppoe server
+    ${pppoeServerDict}    Create Dictionary    startIpAddress    10.0.0.5/24
+    Set To Dictionary    ${pppoeServerDict}    numberOfIpAddresses    123
+    Set To Dictionary    ${pppoeServerDict}    host    myStaticVirtualHost
+    Set To Dictionary    ${pppoeServerDict}    isPapSupported    true
+    Set To Dictionary    ${pppoeServerDict}    startSessionId    456
+    Set To Dictionary    ${pppoeServerDict}    serviceName    bla
+    Set To Dictionary    ${pppoeServerDict}    accessConcentrator    blubb
+    Shenick.Pppoe Server Create    myPppoeServer    ${pppoeServerDict}
+    # upload & start
+    Shenick.Test Group Upload
+    Test Group Start    ${TEST_NAME}
+    # statistics
+    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    Out Bits    rate
+    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    Out Packets    rate
+    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    In Bits    rate
+    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    In Packets    rate
+    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    In Packet Errors    rate
+    [Teardown]    Debug Files Get
+
+Statistics
+    Shenick.User Set    robot
+    Comment    Test Group Stop    PPPoE Server
+    Comment    sleep    5s
+    Comment    Test Group Start    PPPoE Server
+    Comment    sleep    5s
+    Comment    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    Out Bits
+    ...    rate
+    Comment    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    Out Packets
+    ...    rate
+    Comment    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    In Bits
+    ...    rate
+    Comment    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    In Packets
+    ...    rate
+    Comment    ${stats}    Statistics Get    normal    host    myStaticVirtualHost    In Packet Errors
+    ...    rate
+    ${options}    Create Dictionary    entityType    aggregate
+    Statistics Save    \    ${options}
+    ${stats}    Statistics Get All    ${options}
+    [Teardown]    Debug Files Get
+
+*** Keywords ***
+TCP Profiles : Create
+    #default values
+    ${noValues}    Create Dictionary
+    Shenick.Tcp Characteristics Create    tcpEmpty    ${noValues}
+    #all values
+    ${allValues}    Create Dictionary
+    Set To Dictionary    ${allValues}    description    TCP Characteristics Profile Data description.
+    Set To Dictionary    ${allValues}    maxTransmitBufferSize    150000
+    Set To Dictionary    ${allValues}    maxAdvertRecvWindowSize    10000
+    Set To Dictionary    ${allValues}    initialRetransTimeout    300000
+    Set To Dictionary    ${allValues}    tcpTimer    250
+    Set To Dictionary    ${allValues}    emulateDelayedAcks    max2Segments
+    Set To Dictionary    ${allValues}    firstSegmentAckSynAck    true
+    Set To Dictionary    ${allValues}    finalSegmentIncFin    false
+    Set To Dictionary    ${allValues}    finalSegmentAckIncFin    false
+    Set To Dictionary    ${allValues}    maxSegmentSize    1000
+    Set To Dictionary    ${allValues}    windowScale    5
+    Set To Dictionary    ${allValues}    useSackWhenPermitted    true
+    Set To Dictionary    ${allValues}    setSackPermitted    true
+    Set To Dictionary    ${allValues}    suppTimestampWhenReq    true
+    Set To Dictionary    ${allValues}    reqTimestamp    true
+    Shenick.Tcp Characteristics Create    tcpAllValues    ${allValues}
+    Shenick.Test Group Upload
+
+Virtual Host : Create generalParamDict
+    [Arguments]    ${tcpCharacteristics}    ${tcpOutRateLimit}    ${tcpInRateLimit}    ${networkCharacteristics}
+    ${generalParam}    Create Dictionary
+    Set To Dictionary    ${generalParam}    description    This Shenick Hosts has all custom parameters
+    Set To Dictionary    ${generalParam}    numberOfHosts    2
+    Set To Dictionary    ${generalParam}    type    virtualHost
+    Set To Dictionary    ${generalParam}    networkVisible    false
+    Set To Dictionary    ${generalParam}    ipAddressAssignmentType    dhcpv4
+    Set To Dictionary    ${generalParam}    ipAddressIncrementMode    subnet
+    Set To Dictionary    ${generalParam}    ipAddressIncrementSize    2
+    Set To Dictionary    ${generalParam}    advertiseRoutes    disabled
+    Set To Dictionary    ${generalParam}    enablePppoe    true
+    Set To Dictionary    ${generalParam}    tcpCharacteristics    ${TEST_NAME}_tcpCharacteristics
+    Set To Dictionary    ${generalParam}    tcpOutBandwidthRateLimit    ${TEST_NAME}_rateLimit
+    Set To Dictionary    ${generalParam}    tcpInBandwidthRateLimit    ${TEST_NAME}_rateLimit
+    Set To Dictionary    ${generalParam}    tcpNetworkCharacteristics    ${TEST_NAME}_networkChar
+    Set To Dictionary    ${generalParam}    serviceState    outOfService
+    Set To Dictionary    ${generalParam}    blockAllTraffic    true
+    [Return]    ${generalParam}
+
+Virtual Host : Create linkLayerParamDict
+    ${paramDict}    Create Dictionary
+    Set To Dictionary    ${paramDict}    physicalInterface    3/1/0
+    Set To Dictionary    ${paramDict}    macAddress    00:11:22:33:44:55
+    Set To Dictionary    ${paramDict}    mtu    2000
+    Set To Dictionary    ${paramDict}    linkLayer    multipleTaggedVlan
+    Set To Dictionary    ${paramDict}    vni    167772
+    ${vlanIdList}    Create List    100    7    2    4    5
+    ...    6
+    Set To Dictionary    ${paramDict}    vlanIdList    ${vlanIdList}
+    ${vlanPrioList}    Create List    4    0
+    Set To Dictionary    ${paramDict}    vlanPrioList    ${vlanPrioList}
+    [Return]    ${paramDict}
+
+Virtual Host : Create defaultPppoeParamDict
+    ${paramDict}    Create Dictionary
+    Set To Dictionary    ${paramDict}    forIpv6    false
+    Set To Dictionary    ${paramDict}    username    myUsername
+    Set To Dictionary    ${paramDict}    password    myPassword
+    Set To Dictionary    ${paramDict}    serviceName    myService
+    Set To Dictionary    ${paramDict}    accessConcentrator    myConcentrator
+    Set To Dictionary    ${paramDict}    mru    2000
+    Set To Dictionary    ${paramDict}    isPapSupported    true
+    Set To Dictionary    ${paramDict}    isChapSupported    true
+    Set To Dictionary    ${paramDict}    checkHostUnique    false
+    Set To Dictionary    ${paramDict}    isAcCookieUsed    false
+    Set To Dictionary    ${paramDict}    isMagicNumberUsed    false
+    Set To Dictionary    ${paramDict}    doubleRetransmitTime    true
+    Set To Dictionary    ${paramDict}    retransmitTimer    2
+    Set To Dictionary    ${paramDict}    retransmitTimerMetric    secs
+    Set To Dictionary    ${paramDict}    lcpLinkTestRequestMode    echo
+    Set To Dictionary    ${paramDict}    lcpLinkTestPayloadSize    1500
+    Set To Dictionary    ${paramDict}    lcpLinkTestInterval    5000
+    Set To Dictionary    ${paramDict}    lcpLinkTestIntervalMetric    ms
+    Set To Dictionary    ${paramDict}    reconnectAfterFailure    false
+    Set To Dictionary    ${paramDict}    requestPrimaryDns    true
+    Set To Dictionary    ${paramDict}    requestSecondaryDns    true
+    [Return]    ${paramDict}
+
+Virtual Host : Create statisticsParamDict
+    [Arguments]    ${aggregateGroupName}
+    ${paramDict}    Create Dictionary
+    Set To Dictionary    ${paramDict}    normalStats    false
+    Set To Dictionary    ${paramDict}    fineStats    true
+    Set To Dictionary    ${paramDict}    dhcpStats    true
+    Set To Dictionary    ${paramDict}    pppoeStats    true
+    Set To Dictionary    ${paramDict}    connectionStats    true
+    Set To Dictionary    ${paramDict}    extendedTcpStats    true
+    Set To Dictionary    ${paramDict}    aggregateGroup    ${aggregateGroupName}
+    [Return]    ${paramDict}
+
+Virtual Host : Create activityParamDict
+    [Arguments]    ${activeDuration}    ${inactiveDuration}    ${startAfterDelay}    ${stopAfterTime}
+    ${activityParamDict}    Create Dictionary
+    Set To Dictionary    ${activityParamDict}    enableActivityCycles    true
+    Set To Dictionary    ${activityParamDict}    activeDuration    ${activeDuration}
+    Set To Dictionary    ${activityParamDict}    activeDurationMetric    mins
+    Set To Dictionary    ${activityParamDict}    enableInactiveDuration    true
+    Set To Dictionary    ${activityParamDict}    inactiveDuration    ${inactiveDuration}
+    Set To Dictionary    ${activityParamDict}    inactiveDurationMetric    mins
+    Set To Dictionary    ${activityParamDict}    enableStartAfterDelay    true
+    Set To Dictionary    ${activityParamDict}    startAfterDelay    ${startAfterDelay}
+    Set To Dictionary    ${activityParamDict}    startAfterDelayMetric    secs
+    Set To Dictionary    ${activityParamDict}    enableStopAfterTime    true
+    Set To Dictionary    ${activityParamDict}    stopAfterTime    ${stopAfterTime}
+    Set To Dictionary    ${activityParamDict}    stopAfterTimeMetric    mins
+    [Return]    ${activityParamDict}
+
+HTTP : External HTTP Proxy
+    [Arguments]    ${host}
+    #min values
+    ${extHttpProxyParams}    Create Dictionary    host    ${host}
+    Shenick.Http External Proxy Create    myExtHttpProxyMinValues    ${extHttpProxyParams}
+    #max values
+    ${extHttpProxyParams}    Create Dictionary    host    ${host}
+    Set To Dictionary    ${extHttpProxyParams}    description    This is my fully-customized external HTTP Proxy.
+    Set To Dictionary    ${extHttpProxyParams}    adminState    disabled
+    Set To Dictionary    ${extHttpProxyParams}    transportPort    8888
+    Shenick.Http External Proxy Create    myExtHttpProxyAllValues    ${extHttpProxyParams}
+
+HTTP : External HTTP Server
+    [Arguments]    ${host}
+    #min values
+    ${paramDict}    Create Dictionary
+    Set To Dictionary    ${paramDict}    host    ${host}
+    Shenick.Http External Server Create    myExtHttpServerMINValues    ${paramDict}
+    #all values
+    Set To Dictionary    ${paramDict}    description    This is my fully customized external HTTP Server!
+    Set To Dictionary    ${paramDict}    adminState    disabled
+    Set To Dictionary    ${paramDict}    transportPort    8888
+    Shenick.Http External Server Create    myExtHttpServerMAXValues    ${paramDict}
+
+HTTP : Resource List
+    Shenick.Probability Distribution Create    HttpResourceListPD    20:15    80:100
+    ${resource1}    Create Dictionary    type    randomData    path    file1    value
+    ...    512000
+    ${resource2}    Create Dictionary    type    randomData    path    file2    value
+    ...    HttpResourceListPD
+    ${resource3}    Create Dictionary    type    fileResource    path    file3    value
+    ...    /tmp/robot.pl
+    ${resourceList}    Create List    ${resource1}    ${resource2}    ${resource3}
+    ${paramDict}    Create Dictionary
+    Set To Dictionary    ${paramDict}    description    This is my customized HTTP Resource List!
+    Set To Dictionary    ${paramDict}    resourceList    ${resourceList}
+    Shenick.Http Resource List Create    myHttpResourceList    ${paramDict}
+
+HTTP : Request List
+    #create header field
+    ${header1}    Create Dictionary    fieldName    Host    fieldBody    localhost
+    ${header2}    Create Dictionary    fieldName    bla    fieldBody    blubb
+    ${HFL}    Create List    ${header1}    ${header2}
+    ${HFLParam}    Create Dictionary    headerFieldList    ${HFL}
+    Shenick.Http Header Field List Create    myHttpHeaderFieldList    ${HFLParam}
+    #body part list
+    ${bodyPart1}    Create Dictionary    bodyDataType    file    content    lala    additionalHeaders
+    ...    myHttpHeaderFieldList    contentType    application/activemessage
+    Http Body Part List Create    myHttpBodyPartList    ${bodyPart1}
+    #request list
+    ${Request1}    Create Dictionary    method    GET    uri    index.php    headerFieldList
+    ...    myHttpHeaderFieldList
+    ${Request2}    Create Dictionary    method    HEAD    uri    index.html
+    ${Request3}    Create Dictionary    method    POST    uri    index.php    content
+    ...    This is my form entry!    bodyPartList    myHttpBodyPartList
+    ${RL}    Create List    ${Request1}    ${Request2}    ${Request3}
+    #Create the lists
+    ${RLParams1}    Create Dictionary    requestList    ${RL}    description    This is a sequentially working Request List!    selectionMode
+    ...    sequential
+    Shenick.Http Request List Create    HRL1    ${RLParams1}
+    ${RLParams2}    Create Dictionary    requestList    ${RL}    description    This Request List works randomly.    selectionMode
+    ...    Random
+    Shenick.Http Request List Create    HRL2    ${RLParams2}
+    ${RLParams3}    Create Dictionary    requestList    ${RL}    description    This Request List uses Zipfian Distribution.    selectionMode
+    ...    Zipfian    zipfianExponent    5.1
+    Shenick.Http Request List Create    HRL3    ${RLParams3}
+
+HTTP : Server
+    [Arguments]    ${host}
+    ${paramDict}    Create Dictionary    host    ${host}
+    Set To Dictionary    ${paramDict}    resourceList    myHttpResourceList
+    Set To Dictionary    ${paramDict}    description    my http server description
+    Set To Dictionary    ${paramDict}    transportPort    1234
+    Set To Dictionary    ${paramDict}    normalStats    true    fineStats    true
+    Set To Dictionary    ${paramDict}    qos    3
+    Set To Dictionary    ${paramDict}    tlsEnabled    true
+    Set To Dictionary    ${paramDict}    responseDelay    1
+    Set To Dictionary    ${paramDict}    responseDelayMetric    secs
+    Set To Dictionary    ${paramDict}    numberOfServers    1
+    Set To Dictionary    ${paramDict}    adminState    disabled
+    Set To Dictionary    ${paramDict}    startAfter    300
+    Set To Dictionary    ${paramDict}    startAfterMetric    ms
+    Set To Dictionary    ${paramDict}    stopAfter    60
+    Set To Dictionary    ${paramDict}    stopAfterMetric    mins
+    Set To Dictionary    ${paramDict}    extendedSizeBasedRequestsEnabled    true
+    Set To Dictionary    ${paramDict}    acwsDomainName    bla.com
+    Http Server Create    myHttpServer    ${paramDict}
+
+HTTP : Client
+    [Arguments]    ${host}
+    ${paramDict}    Create Dictionary    host    ${host}
+    Set To Dictionary    ${paramDict}    requestList    HRL1
+    Set To Dictionary    ${paramDict}    server    myHttpServer
+    Set To Dictionary    ${paramDict}    description    yeah!
+    Set To Dictionary    ${paramDict}    numberOfClients    2
+    Set To Dictionary    ${paramDict}    adminState    disabled
+    Set To Dictionary    ${paramDict}    serviceState    outOfService
+    Set To Dictionary    ${paramDict}    transportPort    8118
+    Comment    Set To Dictionary    ${paramDict}    provisioningMode
+    Set To Dictionary    ${paramDict}    normalStats    true
+    Set To Dictionary    ${paramDict}    fineStats    true
+    Set To Dictionary    ${paramDict}    qos    5
+    Set To Dictionary    ${paramDict}    startAfter    1
+    Set To Dictionary    ${paramDict}    startAfterMetric    mins
+    Set To Dictionary    ${paramDict}    stopAfter    2
+    Set To Dictionary    ${paramDict}    stopAfterMetric    mins
+    Comment    Set To Dictionary    ${paramDict}    aggregateGroup
+    Comment    Set To Dictionary    ${paramDict}    tcpCharacteristics
+    Comment    Set To Dictionary    ${paramDict}    numberOfMultipleApps
+    Comment    Set To Dictionary    ${paramDict}    startIpAddress
+    Comment    Set To Dictionary    ${paramDict}    numberIpAddress
+    Comment    Set To Dictionary    ${paramDict}    ipAddressSelection
+    Set To Dictionary    ${paramDict}    zipfianExponent    2
+    Comment    Set To Dictionary    ${paramDict}    connectionRateLimit
+    Comment    Set To Dictionary    ${paramDict}    retrySessionAfterFailure
+    Comment    Set To Dictionary    ${paramDict}    retrySessionCount
+    Comment    Set To Dictionary    ${paramDict}    retrySessionDelay
+    Comment    Set To Dictionary    ${paramDict}    retrySessionDelayMetric
+    Comment    Set To Dictionary    ${paramDict}    repeatSessionOnSuccess
+    Comment    Set To Dictionary    ${paramDict}    repeatSessionCount
+    Comment    Set To Dictionary    ${paramDict}    repeatSessionDelay
+    Comment    Set To Dictionary    ${paramDict}    repeatSessionDelayMetric
+    Comment    Set To Dictionary    ${paramDict}    proxy
+    Comment    Set To Dictionary    ${paramDict}    proxyHeaders
+    Set To Dictionary    ${paramDict}    httpVersion    1.0
+    Set To Dictionary    ${paramDict}    tlsEnabled    true
+    Comment    Set To Dictionary    ${paramDict}    authenticationUsername
+    Comment    Set To Dictionary    ${paramDict}    authenticationPassword
+    Set To Dictionary    ${paramDict}    authenticationUseInitialReq    false
+    Comment    Set To Dictionary    ${paramDict}    numberRequestsPerConnection
+    Comment    Set To Dictionary    ${paramDict}    requestDelay
+    Comment    Set To Dictionary    ${paramDict}    requestDelayMetric
+    Comment    Set To Dictionary    ${paramDict}    connectionsDelay
+    Comment    Set To Dictionary    ${paramDict}    connectionsDelayMetric
+    Comment    Set To Dictionary    ${paramDict}    ignoreRedirectsEnabled
+    Comment    Set To Dictionary    ${paramDict}    connectionResetEnabled
+    Comment    Set To Dictionary    ${paramDict}    httpResponseCodeStats
+    Comment    Set To Dictionary    ${paramDict}    keywordSubstitutionEnabled
+    Comment    Set To Dictionary    ${paramDict}    headerFieldList
+    Http Client Create    myHttpClient    ${paramDict}
